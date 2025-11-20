@@ -5,12 +5,15 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    bat 'docker login -u manideepreddyn -p manideep@1'
+                    bat '''
+echo manideep@1 | docker login -u manideepreddyn --password-stdin
+'''
+
 
 
                     // Build and push Docker image
                     bat 'docker build -t w9-dh-app:latest .'
-                    bat 'docker tag w9-dd-app:latest manideepreddyn/w9-dh-app:latest'
+                    bat 'docker tag w9-dh-app:latest manideepreddyn/w9-dh-app:latest'
                     bat 'docker push manideepreddyn/w9-dh-app:latest'
                 }
             }
@@ -37,7 +40,7 @@ pipeline {
                     bat 'kubectl apply -f my-kube1-service.yaml'
                     
                     // Expose the Kubernetes Dashboard service
-                    bat 'minikube dashboard'
+                    bat 'minikube dashboard --url'
                     
                     echo 'Deploying application...'
                 }
